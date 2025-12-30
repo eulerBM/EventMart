@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -16,6 +17,27 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+
+    try {
+
+      const response = await axios.post("http://localhost:8080/login", {
+        email,
+        password,
+      });
+
+      localStorage.setItem("token", response.data.token);
+
+      navigate("/");
+
+    } catch (error) {
+
+      console.error("Erro no login", error);
+      alert("Erro ao logar");
+      
+    }
+
+    
     const success = await login(email, password);
     if (success) {
       navigate("/");
