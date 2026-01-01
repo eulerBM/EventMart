@@ -1,3 +1,4 @@
+import { api } from "./api";
 
 interface LoginResponse {
   token: string;
@@ -7,10 +8,8 @@ interface LoginResponse {
   };
 }
 
-
-
-export async function login(email: string, password: string) {
-  const response = await api.post<LoginResponse>("/login", {
+export async function loginService(email: string, password: string) {
+  const response = await api.post<LoginResponse>("auth/login", {
     email,
     password,
   });
@@ -18,8 +17,10 @@ export async function login(email: string, password: string) {
   return response.data;
 }
 
-export async function register(name: string, email: string, password: string) {
-  const response = await api.post<LoginResponse>("/login", {
+
+export async function registerService(name: string, email: string, password: string) {
+  const response = await api.post("auth/register", {
+    name,
     email,
     password,
   });

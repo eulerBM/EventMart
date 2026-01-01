@@ -4,6 +4,7 @@ import com.eventmart.back_end.dtos.AuthLoginDTO;
 import com.eventmart.back_end.dtos.AuthRegisterDTO;
 import com.eventmart.back_end.model.UserModel;
 import com.eventmart.back_end.repository.UserRepository;
+import com.eventmart.back_end.response.login.LoginResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,9 +45,14 @@ public class AuthService {
 
         }
 
-        String JwtAccessToken = jwtService.generateJwt(userBy.getEmail(), userBy.getIdPublic());
+        String jwtAccessToken = jwtService.generateJwt(userBy.getEmail(), userBy.getIdPublic());
 
-        return ResponseEntity.ok().body(JwtAccessToken);
+        LoginResponse.User userResponse = new LoginResponse.User(
+                userBy.getFullName(),
+                userBy.getEmail()
+        );
+
+        return ResponseEntity.ok().body(new LoginResponse(jwtAccessToken, userResponse));
 
     }
 

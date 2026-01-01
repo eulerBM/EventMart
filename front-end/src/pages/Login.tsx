@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
-import axios from "axios";
+import { loginService } from "@/services/AuthService";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,21 +21,19 @@ const Login = () => {
 
     try {
 
-      const response = await axios.post("http://localhost:8080/login", {
-        email,
-        password,
-      });
+        const data = await loginService(email, password);
 
-      localStorage.setItem("token", response.data.token);
+        console.log("Token:", data.token);
+        console.log("User:", data.user);
 
-      navigate("/");
-
-    } catch (error) {
-
-      console.error("Erro no login", error);
-      alert("Erro ao logar");
       
-    }
+        localStorage.setItem("token", data.token);
+
+      } catch (error) {
+
+        console.error("Erro ao fazer login", error);
+
+      }
 
     
     const success = await login(email, password);
