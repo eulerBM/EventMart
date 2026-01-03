@@ -1,6 +1,7 @@
 import { api } from "./api";
 
 interface LoginResponse {
+  status: number;
   token: string;
   user: {
     name: string;

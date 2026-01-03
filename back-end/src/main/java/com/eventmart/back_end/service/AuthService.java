@@ -4,6 +4,7 @@ import com.eventmart.back_end.dtos.AuthLoginDTO;
 import com.eventmart.back_end.dtos.AuthRegisterDTO;
 import com.eventmart.back_end.model.UserModel;
 import com.eventmart.back_end.repository.UserRepository;
+import com.eventmart.back_end.response.error.ErrorResponse;
 import com.eventmart.back_end.response.login.LoginResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,8 @@ public class AuthService {
 
         if (user.isEmpty()){
 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Credenciais inválidas"));
 
         }
 
@@ -41,7 +43,8 @@ public class AuthService {
 
         if(!equalPassword){
 
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Credenciais inválidas");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Credenciais inválidas"));
 
         }
 
@@ -52,7 +55,7 @@ public class AuthService {
                 userBy.getEmail()
         );
 
-        return ResponseEntity.ok().body(new LoginResponse(jwtAccessToken, userResponse));
+        return ResponseEntity.ok().body(new LoginResponse(HttpStatus.OK.value(), jwtAccessToken, userResponse));
 
     }
 

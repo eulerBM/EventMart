@@ -10,7 +10,7 @@ import { loginService } from "@/services/AuthService";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login, isLoading } = useAuth();
+  const {login, isLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -21,13 +21,18 @@ const Login = () => {
 
     try {
 
-        const data = await loginService(email, password);
+      const response = await loginService(email, password);
 
-        console.log("Token:", data.token);
-        console.log("User:", data.user);
+      if(response.status < 300){
 
-      
-        localStorage.setItem("token", data.token);
+        console.log("tem token")
+
+        localStorage.setItem("token", response.token);
+
+
+       }
+
+       console.log("nao tem token")
 
       } catch (error) {
 

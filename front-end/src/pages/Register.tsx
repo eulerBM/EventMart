@@ -6,10 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
+import { registerService } from "@/services/AuthService";
 
 const Register = () => {
   const navigate = useNavigate();
-  const { register, isLoading } = useAuth();
+  const {register, isLoading } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,6 +18,31 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    try {
+    
+      const response = await registerService(name, email, password);
+    
+      if(response.status < 300){
+    
+      console.log("tem token")
+    
+      localStorage.setItem("token", response.token);
+    
+    
+      }
+    
+      console.log("nao tem token")
+    
+    } catch (error) {
+    
+      console.error("Erro ao fazer login", error);
+    
+    }
+
+
+
+
     const success = await register(name, email, password);
     if (success) {
       navigate("/");
