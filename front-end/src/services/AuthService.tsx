@@ -1,4 +1,5 @@
 import { api } from "./api";
+import { toast } from "sonner";
 
 interface LoginResponse {
   status: number;
@@ -7,6 +8,11 @@ interface LoginResponse {
     name: string;
     email: string;
   };
+}
+
+interface RegisterResponse {
+  status: number;
+  data: string;
 }
 
 export async function loginService(email: string, password: string) {
@@ -20,11 +26,13 @@ export async function loginService(email: string, password: string) {
 
 
 export async function registerService(name: string, email: string, password: string) {
-  const response = await api.post("auth/register", {
+  const response = await api.post<RegisterResponse>("auth/register", {
     name,
     email,
     password,
   });
+
+  
 
   return response.data;
 }

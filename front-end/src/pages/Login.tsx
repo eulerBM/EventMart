@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import { loginService } from "@/services/AuthService";
+import { toast } from "sonner";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,9 +26,8 @@ const Login = () => {
 
       if(response.status < 300){
 
-        console.log("tem token")
-
         localStorage.setItem("token", response.token);
+
 
 
        }

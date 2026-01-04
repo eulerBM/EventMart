@@ -6,6 +6,7 @@ import com.eventmart.back_end.model.UserModel;
 import com.eventmart.back_end.repository.UserRepository;
 import com.eventmart.back_end.response.error.ErrorResponse;
 import com.eventmart.back_end.response.login.LoginResponse;
+import com.eventmart.back_end.response.login.RegisterResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -61,28 +62,24 @@ public class AuthService {
 
     public ResponseEntity<?> register(AuthRegisterDTO data){
 
-        if(!data.password().equals(data.passwordAgain())){
-
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Senhas diferentes");
-
-        }
-
         Optional<UserModel> user = userRepository.findByEmail(data.email());
 
         if(user.isPresent()){
 
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email já cadastrado");
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ErrorResponse(HttpStatus.CONFLICT.value(), "Email já cadastrado"));
 
         }
 
         String encryptedPassword = passwordEncoder.encode(data.password());
 
-        UserModel userModel = new UserModel(data.nameFull(),
+        UserModel userModel = new UserModel(data.name(),
                                             data.email(),
                                             encryptedPassword);
 
         userRepository.save(userModel);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new RegisterResponse(HttpStatus.CREATED.value(), "Conta criada com sucesso"));
     }
 }

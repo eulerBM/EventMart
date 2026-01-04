@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useAuth } from "@/contexts/AuthContext";
 import { motion } from "framer-motion";
 import { registerService } from "@/services/AuthService";
+import { toast } from "sonner";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -24,24 +25,16 @@ const Register = () => {
       const response = await registerService(name, email, password);
     
       if(response.status < 300){
-    
-      console.log("tem token")
-    
-      localStorage.setItem("token", response.token);
-    
-    
+
+        toast.success(response.data)
+
       }
-    
-      console.log("nao tem token")
     
     } catch (error) {
     
       console.error("Erro ao fazer login", error);
     
     }
-
-
-
 
     const success = await register(name, email, password);
     if (success) {
