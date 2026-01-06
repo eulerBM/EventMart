@@ -19,32 +19,11 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-
-    try {
-
-      const response = await loginService(email, password);
-
-      if(response.status < 300){
-
-        localStorage.setItem("token", response.token);
-
-
-
-       }
-
-       console.log("nao tem token")
-
-      } catch (error) {
-
-        console.error("Erro ao fazer login", error);
-
-      }
-
-    
     const success = await login(email, password);
     if (success) {
       navigate("/");
     }
+
   };
 
   return (

@@ -11,7 +11,7 @@ public record AuthRegisterDTO(
     @Email(message = "Email invalido")
     String email,
 
-    @Size(min = 8, max = 100, message = "A senha deve ter pelo menos 8 caracteres")
+    @Size(min = 8, max = 100, message = "A senha deve ter pelo menos 6 caracteres")
     String password
 
 ) {

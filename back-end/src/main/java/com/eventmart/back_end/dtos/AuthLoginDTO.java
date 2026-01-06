@@ -8,8 +8,8 @@ public record AuthLoginDTO(
         @Email(message = "Email invalido")
         String email,
 
-        @Size(min = 8, max = 100, message = "A senha deve ter pelo menos 8 caracteres")
-        String passowrd
-) {
+        @Size(min = 6, max = 100, message = "A senha deve ter pelo menos 6 caracteres")
+        String password
 
+) {
 }

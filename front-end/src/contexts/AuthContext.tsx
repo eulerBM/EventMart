@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
+import { loginService } from "@/services/AuthService";
 import { toast } from "sonner";
 
 interface User {
@@ -27,23 +28,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = useCallback(async (email: string, password: string) => {
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    // API call
+    const response = await loginService(email, password);
+
     
     if (email && password.length >= 6) {
-      const newUser = {
-        id: "user_" + Date.now(),
-        name: email.split("@")[0],
-        email,
-      };
-      setUser(newUser);
-      localStorage.setItem("eventmart_user", JSON.stringify(newUser));
-      toast.success("Welcome back!");
-      setIsLoading(false);
-      return true;
+      
+      if(response.status <= 299){
+
+        const newUser = {
+          id: "user_" + Date.now(),
+          name: response.user.name,
+          email: response.user.email
+        };
+        setUser(newUser);
+        localStorage.setItem("eventmart_user", JSON.stringify(newUser));
+        localStorage.setItem("token", response.token);
+
+        toast.success("Bem vindo de volta!");
+        setIsLoading(false);
+        return true;
+
+      }
     }
     
-    toast.error("Invalid credentials");
+    toast.error("Credenciais inválidas");
     setIsLoading(false);
     return false;
   }, []);

@@ -1,5 +1,4 @@
 import { api } from "./api";
-import { toast } from "sonner";
 
 interface LoginResponse {
   status: number;
@@ -31,8 +30,6 @@ export async function registerService(name: string, email: string, password: str
     email,
     password,
   });
-
   
-
   return response.data;
 }

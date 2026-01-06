@@ -29,6 +29,8 @@ public class AuthService {
 
     public ResponseEntity<?> login(AuthLoginDTO data){
 
+        System.out.println(data.password());
+
         Optional<UserModel> user = userRepository.findByEmail(data.email());
 
         if (user.isEmpty()){
@@ -40,7 +42,7 @@ public class AuthService {
 
         UserModel userBy = user.get();
 
-        var equalPassword = passwordEncoder.matches(data.passowrd(), userBy.getPassword());
+        var equalPassword = passwordEncoder.matches(data.password(), userBy.getPassword());
 
         if(!equalPassword){
 
