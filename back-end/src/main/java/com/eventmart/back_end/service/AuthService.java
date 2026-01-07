@@ -29,14 +29,16 @@ public class AuthService {
 
     public ResponseEntity<?> login(AuthLoginDTO data){
 
-        System.out.println(data.password());
-
         Optional<UserModel> user = userRepository.findByEmail(data.email());
 
         if (user.isEmpty()){
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Credenciais inválidas"));
+                    .body(new LoginResponse(HttpStatus.UNAUTHORIZED.value(),
+                            "Credenciais inválidas",
+                            null,
+                            null));
+
 
         }
 
@@ -47,18 +49,23 @@ public class AuthService {
         if(!equalPassword){
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Credenciais inválidas"));
+                    .body(new LoginResponse(HttpStatus.UNAUTHORIZED.value(),
+                            "Credenciais inválidas",
+                            null,
+                            null));
+
 
         }
 
         String jwtAccessToken = jwtService.generateJwt(userBy.getEmail(), userBy.getIdPublic());
 
         LoginResponse.User userResponse = new LoginResponse.User(
+                userBy.getIdPublic(),
                 userBy.getFullName(),
                 userBy.getEmail()
         );
 
-        return ResponseEntity.ok().body(new LoginResponse(HttpStatus.OK.value(), jwtAccessToken, userResponse));
+        return ResponseEntity.ok().body(new LoginResponse(HttpStatus.OK.value(), null, jwtAccessToken, userResponse));
 
     }
 

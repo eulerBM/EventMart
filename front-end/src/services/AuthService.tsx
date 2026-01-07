@@ -2,8 +2,10 @@ import { api } from "./api";
 
 interface LoginResponse {
   status: number;
+  nameError: string;
   token: string;
   user: {
+    idPublic: string;
     name: string;
     email: string;
   };

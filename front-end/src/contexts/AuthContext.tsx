@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { loginService } from "@/services/AuthService";
 import { toast } from "sonner";
+import { alertError } from "@/alert/alertError";
+import { loginFieldsValidation } from "@/validation/loginFields";
 
 interface User {
   id: string;
@@ -32,26 +34,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // API call
     const response = await loginService(email, password);
 
-    
-    if (email && password.length >= 6) {
-      
-      if(response.status <= 299){
 
-        const newUser = {
-          id: "user_" + Date.now(),
-          name: response.user.name,
-          email: response.user.email
-        };
-        setUser(newUser);
-        localStorage.setItem("eventmart_user", JSON.stringify(newUser));
-        localStorage.setItem("token", response.token);
+    if(!loginFieldsValidation(email, password)){
+      return;
+    }
 
-        toast.success("Bem vindo de volta!");
-        setIsLoading(false);
-        return true;
+    if(response.status <= 299){
+
+      const newUser = {
+        id: "user_" + response.user.idPublic,
+        name: response.user.name,
+        email: response.user.email
+      };
+
+      setUser(newUser);
+      localStorage.setItem("eventmart_user", JSON.stringify(newUser));
+      localStorage.setItem("token", response.token);
+
+      toast.success("Bem vindo de volta!");
+      setIsLoading(false);
+      return true;
 
       }
-    }
+
+    return alertError(response.status, response.nameError)
+    
     
     toast.error("Credenciais inválidas");
     setIsLoading(false);
