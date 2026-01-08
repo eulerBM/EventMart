@@ -89,6 +89,6 @@ public class AuthService {
         userRepository.save(userModel);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new RegisterResponse(HttpStatus.CREATED.value(), "Conta criada com sucesso"));
+                .body(new RegisterResponse(HttpStatus.CREATED.value(),null ,"Conta criada com sucesso"));
     }
 }

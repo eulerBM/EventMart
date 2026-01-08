@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
-import { loginService } from "@/services/AuthService";
+import { loginService, registerService } from "@/services/AuthService";
 import { toast } from "sonner";
 import { alertError } from "@/alert/alertError";
 import { loginFieldsValidation } from "@/validation/loginFields";
+import { registerFieldsValidation } from "@/validation/registerFields";
 
 interface User {
   id: string;
@@ -31,15 +32,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = useCallback(async (email: string, password: string) => {
     setIsLoading(true);
 
-    // API call
-    const response = await loginService(email, password);
-
-
+    //Validation
     if(!loginFieldsValidation(email, password)){
+      setIsLoading(false);
       return;
     }
 
-    if(response.status <= 299){
+    try{
+
+        // API call
+      const response = await loginService(email.trim(), password.trim());
 
       const newUser = {
         id: "user_" + response.user.idPublic,
@@ -54,23 +56,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       toast.success("Bem vindo de volta!");
       setIsLoading(false);
       return true;
+      
+    } catch (error){
 
-      }
+      alertError(
+        error.response?.data.status ?? 500,
+        error.response?.data?.nameError ?? "Erro inesperado"
+      );
 
-    return alertError(response.status, response.nameError)
-    
-    
-    toast.error("Credenciais inválidas");
-    setIsLoading(false);
-    return false;
+      setIsLoading(false);
+      return false;
+      
+    }
   }, []);
 
   const register = useCallback(async (name: string, email: string, password: string) => {
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    
-    if (name && email && password.length >= 6) {
+
+    //Validation
+    if(!registerFieldsValidation(name, email, password)){
+      setIsLoading(false);
+      return;
+    }
+
+    try{
+
+      // API call
+      const response = await registerService(name.trim() ,email.trim(), password.trim());
+
       const newUser = {
         id: "user_" + Date.now(),
         name,
@@ -78,14 +91,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       };
       setUser(newUser);
       localStorage.setItem("eventmart_user", JSON.stringify(newUser));
-      toast.success("Account created successfully!");
+      toast.success("Conta criada com sucesso!");
       setIsLoading(false);
       return true;
+
+    } catch(error){
+
+      toast.error("Please fill all fields correctly");
+      setIsLoading(false);
+      return false;
+
     }
     
-    toast.error("Please fill all fields correctly");
-    setIsLoading(false);
-    return false;
   }, []);
 
   const logout = useCallback(() => {
