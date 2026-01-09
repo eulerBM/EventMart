@@ -97,7 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     } catch(error){
 
-      toast.error("Please fill all fields correctly");
+      toast.error("Tente mais tarde!");
       setIsLoading(false);
       return false;
 
