@@ -4,7 +4,6 @@ import com.eventmart.back_end.dtos.AuthLoginDTO;
 import com.eventmart.back_end.dtos.AuthRegisterDTO;
 import com.eventmart.back_end.model.UserModel;
 import com.eventmart.back_end.repository.UserRepository;
-import com.eventmart.back_end.response.error.ErrorResponse;
 import com.eventmart.back_end.response.login.LoginResponse;
 import com.eventmart.back_end.response.login.RegisterResponse;
 import org.springframework.http.HttpStatus;
@@ -76,7 +75,7 @@ public class AuthService {
         if(user.isPresent()){
 
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new ErrorResponse(HttpStatus.CONFLICT.value(), "Email já cadastrado"));
+                    .body(new RegisterResponse(HttpStatus.CONFLICT.value(), "Email já cadastrado", null));
 
         }
 
@@ -89,6 +88,6 @@ public class AuthService {
         userRepository.save(userModel);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new RegisterResponse(HttpStatus.CREATED.value(),null ,"Conta criada com sucesso"));
+                .body(new RegisterResponse(HttpStatus.CREATED.value(),null,"Conta criada com sucesso"));
     }
 }

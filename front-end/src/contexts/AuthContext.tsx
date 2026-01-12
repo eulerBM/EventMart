@@ -84,20 +84,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // API call
       const response = await registerService(name.trim() ,email.trim(), password.trim());
 
-      const newUser = {
-        id: "user_" + Date.now(),
-        name,
-        email,
-      };
-      setUser(newUser);
-      localStorage.setItem("eventmart_user", JSON.stringify(newUser));
-      toast.success("Conta criada com sucesso!");
+      toast.success(response.data);
       setIsLoading(false);
       return true;
 
     } catch(error){
 
-      toast.error("Tente mais tarde!");
+      alertError(
+        error.response?.data.status ?? 500,
+        error.response?.data?.nameError ?? "Erro inesperado"
+      );
+
       setIsLoading(false);
       return false;
 

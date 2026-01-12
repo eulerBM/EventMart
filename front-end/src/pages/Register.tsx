@@ -20,25 +20,9 @@ const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-    
-      const response = await registerService(name, email, password);
-    
-      if(response.status < 300){
-
-        toast.success(response.data)
-
-      }
-    
-    } catch (error) {
-    
-      console.error("Erro ao fazer login", error);
-    
-    }
-
     const success = await register(name, email, password);
     if (success) {
-      navigate("/");
+      navigate("/login");
     }
   };
 

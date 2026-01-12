@@ -13,6 +13,7 @@ interface LoginResponse {
 
 interface RegisterResponse {
   status: number;
+  nameError: string;
   data: string;
 }
 
