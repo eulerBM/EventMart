@@ -21,6 +21,7 @@ const Index = () => {
   }, []);
 
   const filteredProducts = useMemo(() => {
+    
     let result = searchQuery ? searchProducts(searchQuery) : products;
     
     if (selectedCategory !== "All") {
