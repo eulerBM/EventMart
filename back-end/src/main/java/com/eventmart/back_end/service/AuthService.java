@@ -37,7 +37,6 @@ public class AuthService {
                             "Credenciais inválidas",
                             null,
                             null));
-
         }
 
         UserModel userBy = user.get();
@@ -51,7 +50,6 @@ public class AuthService {
                             "Credenciais inválidas",
                             null,
                             null));
-
 
         }
 
