@@ -38,7 +38,6 @@ public class AuthService {
                             null,
                             null));
 
-
         }
 
         UserModel userBy = user.get();
